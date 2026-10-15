@@ -276,3 +276,5 @@ Cabos sueltos conocidos:
 - **`vite-plugin-pwa`** está instalado pero no se usa en [vite.config.js](vite.config.js); queda disponible por si se quiere habilitar el modo instalable/offline.
 - **No hay linter.** `npm test` corre dos verificaciones: el cálculo del reparto (18 casos) y que ningún template use un identificador sin resolver. El resto de la app no tiene cobertura — en particular, no hay tests de los services contra Supabase. El segundo test existe porque un identificador usado en un template y no definido en el `<script setup>` **no rompe el build**: Vue lo compila como `_ctx.x` y el error recién aparece en el navegador.
 - **Seguridad:** resuelta con `user_id` + RLS por usuario ([migracion-03](supabase/migracion-03-aislamiento-por-usuario.sql)). Recordá los dos pasos manuales del panel de Supabase que están en [Seguridad](#seguridad): cerrar el registro público y tener un solo usuario. Y si querés trabajar con otra persona, hace falta el concepto de organización que se explica ahí.
+#   a l q u i l e r e s - a p p  
+ 
