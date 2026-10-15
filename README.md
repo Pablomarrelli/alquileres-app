@@ -196,6 +196,27 @@ Este esquema asume **un único dueño de los datos**. Si tenés más de una cuen
 
 Si lo que querés es que **otra persona vea y cargue los mismos datos** (tu contador, un socio), este modelo no sirve: hace falta un concepto de equipo u organización (una tabla de organizaciones, `organizacion_id` en lugar de `user_id`, y políticas que verifiquen la pertenencia). Eso es un cambio de diseño, no un ajuste: avisame y lo pensamos antes de seguir cargando datos.
 
+## Publicación
+
+La app es una SPA con `createWebHistory`, así que las rutas son URLs reales. El hosting **tiene que reescribir todo a `index.html`**: si no, entrar directo a `/servicios` o recargar la página devuelve **404**. El repo ya trae la configuración de los dos hosts más comunes:
+
+- [public/_redirects](public/_redirects) → para **Netlify** y **Cloudflare Pages** (Vite lo copia a `dist/`).
+- [vercel.json](vercel.json) → para **Vercel**.
+
+**Variables de entorno.** Vite las incrusta en el bundle durante el build, así que el host las necesita configuradas como variables del proyecto:
+
+| Variable | Obligatoria |
+|---|---|
+| `VITE_SUPABASE_URL` | Sí |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Sí |
+| `VITE_PERMITIR_REGISTRO` | No, solo para dar de alta cuentas |
+
+El `.env` **no se versiona**: está en [.gitignore](.gitignore). Si preferís no configurar nada en el host, compilá local (`npm run build`) y subí la carpeta `dist/` arrastrándola a Netlify: así las variables ya van incrustadas.
+
+**La clave pública es pública, y está bien.** `VITE_SUPABASE_PUBLISHABLE_KEY` viaja en el bundle por diseño. Lo que protege los datos son las políticas de RLS por `user_id` y tener el registro público cerrado: ver [Seguridad](#seguridad).
+
+**Después de publicar**, agregá la URL del sitio en Supabase → Authentication → URL Configuration (*Site URL*), para que los mails de confirmación apunten ahí. Si tocás el esquema de la base, el SQL lo seguís corriendo a mano en Supabase: el deploy no lo hace.
+
 ## Estructura del proyecto
 
 ```
